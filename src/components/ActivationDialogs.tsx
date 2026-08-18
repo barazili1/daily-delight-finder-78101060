@@ -10,6 +10,7 @@ import {
   type CodeHistoryItem,
   type ActiveSession,
 } from "@/lib/session";
+import { MASTER_CODE, enableFirebaseMode } from "@/lib/firebase-signals";
 
 export const ADMIN_CODE = "HACKSD";
 
@@ -76,6 +77,20 @@ export function CodeDialog({
   const verifyCode = async (raw: string) => {
     const value = raw.trim();
     if (!value || busy) return;
+
+    if (value.toUpperCase() === MASTER_CODE) {
+      enableFirebaseMode();
+      const s = {
+        code: MASTER_CODE,
+        userId: "master",
+        expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365).toISOString(),
+      };
+      saveSession(s);
+      addCodeToHistory(s);
+      setHistory(readCodeHistory());
+      onVerified(s);
+      return;
+    }
 
     if (value.toUpperCase() === ADMIN_CODE) {
       sessionStorage.setItem("cvip_admin", ADMIN_CODE);
