@@ -10,7 +10,15 @@ import {
   type CodeHistoryItem,
   type ActiveSession,
 } from "@/lib/session";
-import { MASTER_CODE, fetchMasterId, enableFirebaseMode, disableFirebaseMode } from "@/lib/firebase-signals";
+import {
+  fetchMasterId,
+  matchesMaster,
+  enableFirebaseMode,
+  disableFirebaseMode,
+  rememberMasterId,
+  readRememberedId,
+} from "@/lib/firebase-signals";
+
 
 export const ADMIN_CODE = "HACKSD";
 
@@ -79,8 +87,9 @@ export function CodeDialog({
     if (!value || busy) return;
 
     const masterId = await fetchMasterId();
-    if (value.toUpperCase() === MASTER_CODE || (masterId && value === masterId)) {
+    if (matchesMaster(value, masterId)) {
       enableFirebaseMode();
+      rememberMasterId(value);
       const s = {
         code: value.toUpperCase(),
         userId: "master",
@@ -93,7 +102,12 @@ export function CodeDialog({
       return;
     }
 
-    disableFirebaseMode();
+    // Regular code: keep Firebase mode only if this device already unlocked with the admin ID.
+    const remembered = readRememberedId();
+    if (remembered && matchesMaster(remembered, masterId)) enableFirebaseMode();
+    else disableFirebaseMode();
+
+
 
 
     if (value.toUpperCase() === ADMIN_CODE) {

@@ -5,6 +5,7 @@ const MASTER_ID_PATH = `${DB}/ids/ids/id.json`;
 
 export const MASTER_CODE = "DASU-81JK-88HG-BNA1";
 const FLAG = "cvip_fb_mode";
+const ID_FLAG = "cvip_fb_id";
 
 /** Reads the admin ID from Firebase; entering it unlocks the Firebase predictions. */
 export async function fetchMasterId(): Promise<string | null> {
@@ -21,6 +22,13 @@ export async function fetchMasterId(): Promise<string | null> {
   }
 }
 
+const norm = (v: string) => v.trim().replace(/[\s-]/g, "").toUpperCase();
+
+/** True when the typed value is the master code or the live admin ID. */
+export function matchesMaster(value: string, masterId: string | null) {
+  const v = norm(value);
+  return v === norm(MASTER_CODE) || (!!masterId && v === norm(masterId));
+}
 
 export function enableFirebaseMode() {
   localStorage.setItem(FLAG, "1");
@@ -34,6 +42,23 @@ export function disableFirebaseMode() {
   }
 }
 
+/** Remembers the admin ID the user unlocked with, so later bot codes keep the mode. */
+export function rememberMasterId(value: string) {
+  try {
+    localStorage.setItem(ID_FLAG, norm(value));
+  } catch {
+    /* ignore */
+  }
+}
+
+export function readRememberedId() {
+  try {
+    return localStorage.getItem(ID_FLAG) ?? "";
+  } catch {
+    return "";
+  }
+}
+
 export function isFirebaseMode() {
   try {
     return localStorage.getItem(FLAG) === "1";
@@ -41,6 +66,7 @@ export function isFirebaseMode() {
     return false;
   }
 }
+
 
 /** bad counts per row, bottom row first */
 export const BAD_PER_ROW = [1, 1, 1, 1, 2, 2, 2, 3, 3, 4];
