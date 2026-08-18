@@ -49,7 +49,14 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      verify_activation_code: {
+        Args: { _code: string }
+        Returns: {
+          expires_at: string
+          status: string
+          user_id: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never
