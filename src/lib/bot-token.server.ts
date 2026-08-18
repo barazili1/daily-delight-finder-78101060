@@ -1,6 +1,6 @@
 // Telegram bot token config (server-only file, never bundled to the browser).
 // Paste the bot token from BotFather between the quotes below.
-export const TELEGRAM_BOT_TOKEN = "";
+export const TELEGRAM_BOT_TOKEN = "8926266030:AAERQp6sQgjbxNg2UGUSrwjg56lvlivbbGY";
 
 // Mandatory subscription channel (username or -100... id).
 export const TELEGRAM_CHANNEL = "@IIIIIIIIIIIIIIIIIIIIII00";
