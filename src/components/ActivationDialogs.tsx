@@ -10,7 +10,15 @@ import {
   type CodeHistoryItem,
   type ActiveSession,
 } from "@/lib/session";
-import { MASTER_CODE, fetchMasterId, enableFirebaseMode, disableFirebaseMode } from "@/lib/firebase-signals";
+import {
+  fetchMasterId,
+  matchesMaster,
+  enableFirebaseMode,
+  disableFirebaseMode,
+  rememberMasterId,
+  readRememberedId,
+} from "@/lib/firebase-signals";
+
 
 export const ADMIN_CODE = "HACKSD";
 
