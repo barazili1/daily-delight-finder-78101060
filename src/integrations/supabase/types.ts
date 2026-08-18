@@ -82,6 +82,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      admin_delete_submission: {
+        Args: { _id: string; _pass: string }
+        Returns: undefined
+      }
       admin_list_submissions: {
         Args: { _pass: string }
         Returns: {
@@ -100,6 +104,7 @@ export type Database = {
           telegram_id: string
         }[]
       }
+      request_status: { Args: { _user_id: string }; Returns: string }
       submit_proof: {
         Args: { _img1: string; _img2: string; _user_id: string }
         Returns: string
