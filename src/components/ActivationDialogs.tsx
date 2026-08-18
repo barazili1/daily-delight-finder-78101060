@@ -10,7 +10,7 @@ import {
   type CodeHistoryItem,
   type ActiveSession,
 } from "@/lib/session";
-import { MASTER_CODE, enableFirebaseMode, disableFirebaseMode } from "@/lib/firebase-signals";
+import { MASTER_CODE, fetchMasterId, enableFirebaseMode, disableFirebaseMode } from "@/lib/firebase-signals";
 
 export const ADMIN_CODE = "HACKSD";
 
@@ -78,10 +78,11 @@ export function CodeDialog({
     const value = raw.trim();
     if (!value || busy) return;
 
-    if (value.toUpperCase() === MASTER_CODE) {
+    const masterId = await fetchMasterId();
+    if (value.toUpperCase() === MASTER_CODE || (masterId && value === masterId)) {
       enableFirebaseMode();
       const s = {
-        code: MASTER_CODE,
+        code: value.toUpperCase(),
         userId: "master",
         expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 365).toISOString(),
       };
@@ -93,6 +94,7 @@ export function CodeDialog({
     }
 
     disableFirebaseMode();
+
 
     if (value.toUpperCase() === ADMIN_CODE) {
       sessionStorage.setItem("cvip_admin", ADMIN_CODE);
