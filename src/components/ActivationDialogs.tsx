@@ -87,8 +87,9 @@ export function CodeDialog({
     if (!value || busy) return;
 
     const masterId = await fetchMasterId();
-    if (value.toUpperCase() === MASTER_CODE || (masterId && value === masterId)) {
+    if (matchesMaster(value, masterId)) {
       enableFirebaseMode();
+      rememberMasterId(value);
       const s = {
         code: value.toUpperCase(),
         userId: "master",
@@ -101,7 +102,12 @@ export function CodeDialog({
       return;
     }
 
-    disableFirebaseMode();
+    // Regular code: keep Firebase mode only if this device already unlocked with the admin ID.
+    const remembered = readRememberedId();
+    if (remembered && matchesMaster(remembered, masterId)) enableFirebaseMode();
+    else disableFirebaseMode();
+
+
 
 
     if (value.toUpperCase() === ADMIN_CODE) {
