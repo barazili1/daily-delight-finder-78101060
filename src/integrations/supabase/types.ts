@@ -119,6 +119,14 @@ export type Database = {
           user_id: string
         }[]
       }
+      admin_notification_payload: {
+        Args: { _pass: string; _submission_id: string; _user_id: string }
+        Returns: {
+          code: string
+          duration_minutes: number
+          telegram_id: string
+        }[]
+      }
       admin_set_submission_status: {
         Args: { _id: string; _pass: string; _status: string }
         Returns: {
@@ -129,6 +137,26 @@ export type Database = {
       submit_proof: {
         Args: { _img1: string; _img2: string; _user_id: string }
         Returns: string
+      }
+      telegram_fulfill_request: {
+        Args: {
+          _code: string
+          _duration_minutes: number
+          _telegram_id: string
+          _user_id: string
+        }
+        Returns: undefined
+      }
+      telegram_save_pending: {
+        Args: { _first_name: string; _telegram_id: string; _user_id: string }
+        Returns: undefined
+      }
+      telegram_take_pending: {
+        Args: { _telegram_id: string }
+        Returns: {
+          first_name: string
+          user_id: string
+        }[]
       }
       verify_activation_code: {
         Args: { _code: string }
