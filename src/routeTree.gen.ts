@@ -10,33 +10,180 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AdminRouteImport } from './routes/admin'
+import { Route as GamesRouteImport } from './routes/games'
+import { Route as RequirementsRouteImport } from './routes/requirements'
+import { Route as TermsRouteImport } from './routes/terms'
+import { Route as GameAppleRouteImport } from './routes/game.apple'
+import { Route as GameAviatorRouteImport } from './routes/game.aviator'
+import { Route as GameMinesRouteImport } from './routes/game.mines'
+import { Route as GameThimblesRouteImport } from './routes/game.thimbles'
+import { Route as GameWildwestRouteImport } from './routes/game.wildwest'
+import { Route as ApiPublicNotifyRouteImport } from './routes/api/public/notify'
+import { Route as ApiPublicTelegramRouteImport } from './routes/api/public/telegram'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AdminRoute = AdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GamesRoute = GamesRouteImport.update({
+  id: '/games',
+  path: '/games',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RequirementsRoute = RequirementsRouteImport.update({
+  id: '/requirements',
+  path: '/requirements',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GameAppleRoute = GameAppleRouteImport.update({
+  id: '/game/apple',
+  path: '/game/apple',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GameAviatorRoute = GameAviatorRouteImport.update({
+  id: '/game/aviator',
+  path: '/game/aviator',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GameMinesRoute = GameMinesRouteImport.update({
+  id: '/game/mines',
+  path: '/game/mines',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GameThimblesRoute = GameThimblesRouteImport.update({
+  id: '/game/thimbles',
+  path: '/game/thimbles',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GameWildwestRoute = GameWildwestRouteImport.update({
+  id: '/game/wildwest',
+  path: '/game/wildwest',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicNotifyRoute = ApiPublicNotifyRouteImport.update({
+  id: '/api/public/notify',
+  path: '/api/public/notify',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicTelegramRoute = ApiPublicTelegramRouteImport.update({
+  id: '/api/public/telegram',
+  path: '/api/public/telegram',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/games': typeof GamesRoute
+  '/requirements': typeof RequirementsRoute
+  '/terms': typeof TermsRoute
+  '/game/apple': typeof GameAppleRoute
+  '/game/aviator': typeof GameAviatorRoute
+  '/game/mines': typeof GameMinesRoute
+  '/game/thimbles': typeof GameThimblesRoute
+  '/game/wildwest': typeof GameWildwestRoute
+  '/api/public/notify': typeof ApiPublicNotifyRoute
+  '/api/public/telegram': typeof ApiPublicTelegramRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/games': typeof GamesRoute
+  '/requirements': typeof RequirementsRoute
+  '/terms': typeof TermsRoute
+  '/game/apple': typeof GameAppleRoute
+  '/game/aviator': typeof GameAviatorRoute
+  '/game/mines': typeof GameMinesRoute
+  '/game/thimbles': typeof GameThimblesRoute
+  '/game/wildwest': typeof GameWildwestRoute
+  '/api/public/notify': typeof ApiPublicNotifyRoute
+  '/api/public/telegram': typeof ApiPublicTelegramRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/admin': typeof AdminRoute
+  '/games': typeof GamesRoute
+  '/requirements': typeof RequirementsRoute
+  '/terms': typeof TermsRoute
+  '/game/apple': typeof GameAppleRoute
+  '/game/aviator': typeof GameAviatorRoute
+  '/game/mines': typeof GameMinesRoute
+  '/game/thimbles': typeof GameThimblesRoute
+  '/game/wildwest': typeof GameWildwestRoute
+  '/api/public/notify': typeof ApiPublicNotifyRoute
+  '/api/public/telegram': typeof ApiPublicTelegramRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/admin'
+    | '/games'
+    | '/requirements'
+    | '/terms'
+    | '/game/apple'
+    | '/game/aviator'
+    | '/game/mines'
+    | '/game/thimbles'
+    | '/game/wildwest'
+    | '/api/public/notify'
+    | '/api/public/telegram'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/admin'
+    | '/games'
+    | '/requirements'
+    | '/terms'
+    | '/game/apple'
+    | '/game/aviator'
+    | '/game/mines'
+    | '/game/thimbles'
+    | '/game/wildwest'
+    | '/api/public/notify'
+    | '/api/public/telegram'
+  id:
+    | '__root__'
+    | '/'
+    | '/admin'
+    | '/games'
+    | '/requirements'
+    | '/terms'
+    | '/game/apple'
+    | '/game/aviator'
+    | '/game/mines'
+    | '/game/thimbles'
+    | '/game/wildwest'
+    | '/api/public/notify'
+    | '/api/public/telegram'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AdminRoute: typeof AdminRoute
+  GamesRoute: typeof GamesRoute
+  RequirementsRoute: typeof RequirementsRoute
+  TermsRoute: typeof TermsRoute
+  GameAppleRoute: typeof GameAppleRoute
+  GameAviatorRoute: typeof GameAviatorRoute
+  GameMinesRoute: typeof GameMinesRoute
+  GameThimblesRoute: typeof GameThimblesRoute
+  GameWildwestRoute: typeof GameWildwestRoute
+  ApiPublicNotifyRoute: typeof ApiPublicNotifyRoute
+  ApiPublicTelegramRoute: typeof ApiPublicTelegramRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +195,99 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/admin': {
+      id: '/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/games': {
+      id: '/games'
+      path: '/games'
+      fullPath: '/games'
+      preLoaderRoute: typeof GamesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/requirements': {
+      id: '/requirements'
+      path: '/requirements'
+      fullPath: '/requirements'
+      preLoaderRoute: typeof RequirementsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/game/apple': {
+      id: '/game/apple'
+      path: '/game/apple'
+      fullPath: '/game/apple'
+      preLoaderRoute: typeof GameAppleRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/game/aviator': {
+      id: '/game/aviator'
+      path: '/game/aviator'
+      fullPath: '/game/aviator'
+      preLoaderRoute: typeof GameAviatorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/game/mines': {
+      id: '/game/mines'
+      path: '/game/mines'
+      fullPath: '/game/mines'
+      preLoaderRoute: typeof GameMinesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/game/thimbles': {
+      id: '/game/thimbles'
+      path: '/game/thimbles'
+      fullPath: '/game/thimbles'
+      preLoaderRoute: typeof GameThimblesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/game/wildwest': {
+      id: '/game/wildwest'
+      path: '/game/wildwest'
+      fullPath: '/game/wildwest'
+      preLoaderRoute: typeof GameWildwestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/notify': {
+      id: '/api/public/notify'
+      path: '/api/public/notify'
+      fullPath: '/api/public/notify'
+      preLoaderRoute: typeof ApiPublicNotifyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/telegram': {
+      id: '/api/public/telegram'
+      path: '/api/public/telegram'
+      fullPath: '/api/public/telegram'
+      preLoaderRoute: typeof ApiPublicTelegramRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AdminRoute: AdminRoute,
+  GamesRoute: GamesRoute,
+  RequirementsRoute: RequirementsRoute,
+  TermsRoute: TermsRoute,
+  GameAppleRoute: GameAppleRoute,
+  GameAviatorRoute: GameAviatorRoute,
+  GameMinesRoute: GameMinesRoute,
+  GameThimblesRoute: GameThimblesRoute,
+  GameWildwestRoute: GameWildwestRoute,
+  ApiPublicNotifyRoute: ApiPublicNotifyRoute,
+  ApiPublicTelegramRoute: ApiPublicTelegramRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
