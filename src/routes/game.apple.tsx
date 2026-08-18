@@ -6,6 +6,12 @@ import { TopBar } from "@/components/TopBar";
 import { Logo } from "@/components/Logo";
 import { GameHeaderStats } from "@/components/GameHeaderStats";
 import { WinFeed } from "@/components/WinFeed";
+import {
+  fetchAppleLayout,
+  isFirebaseMode,
+  randomAppleLayout,
+  resetAppleLayout,
+} from "@/lib/firebase-signals";
 
 export const Route = createFileRoute("/game/apple")({
   head: () => ({
