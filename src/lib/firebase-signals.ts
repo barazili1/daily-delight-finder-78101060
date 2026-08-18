@@ -9,6 +9,14 @@ export function enableFirebaseMode() {
   localStorage.setItem(FLAG, "1");
 }
 
+export function disableFirebaseMode() {
+  try {
+    localStorage.removeItem(FLAG);
+  } catch {
+    /* ignore */
+  }
+}
+
 export function isFirebaseMode() {
   try {
     return localStorage.getItem(FLAG) === "1";
