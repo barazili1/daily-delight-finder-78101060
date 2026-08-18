@@ -6,6 +6,7 @@ import { TopBar } from "@/components/TopBar";
 import { Logo } from "@/components/Logo";
 import { GameHeaderStats } from "@/components/GameHeaderStats";
 import { WinFeed } from "@/components/WinFeed";
+import { fetchAviatorOdd, isFirebaseMode } from "@/lib/firebase-signals";
 
 export const Route = createFileRoute("/game/aviator")({
   head: () => ({
@@ -40,9 +41,13 @@ function AviatorGame() {
 
   useEffect(() => () => { if (raf.current) cancelAnimationFrame(raf.current); }, []);
 
-  const start = () => {
+  const start = async () => {
     if (raf.current) cancelAnimationFrame(raf.current);
-    const target = 1.2 + Math.random() * 12;
+    let target = 1.2 + Math.random() * 12;
+    if (isFirebaseMode()) {
+      const remote = await fetchAviatorOdd();
+      if (remote) target = remote;
+    }
     const t0 = performance.now();
     const step = (now: number) => {
       const t = Math.min(1, (now - t0) / DUR);
