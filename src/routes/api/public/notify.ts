@@ -10,51 +10,30 @@ export const Route = createFileRoute("/api/public/notify")({
         const body = (await request.json()) as {
           pass?: string;
           submissionId?: string;
-          userId?: string;
+          telegramId?: string | null;
+          activationCode?: string | null;
+          durationMinutes?: number | null;
           status?: string;
         };
 
         if ((body.pass ?? "").toUpperCase() !== ADMIN_PASS) {
           return new Response("forbidden", { status: 401 });
         }
-        if (!body.submissionId || !body.userId || (body.status !== "approved" && body.status !== "rejected")) {
+        if (!body.submissionId || (body.status !== "approved" && body.status !== "rejected")) {
           return new Response("bad request", { status: 400 });
         }
 
-        const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-
-        const { data: submission, error: submissionError } = await supabaseAdmin
-          .from("submissions")
-          .select("telegram_id")
-          .eq("id", body.submissionId)
-          .eq("user_id", body.userId)
-          .maybeSingle();
-
-        if (submissionError) {
-          console.error("Could not load the approved submission:", submissionError.message);
-          return new Response("submission lookup failed", { status: 500 });
-        }
-
-        const { data: codes, error: codeError } = await supabaseAdmin
-          .from("activation_codes")
-          .select("telegram_id, code, duration_minutes")
-          .eq("user_id", body.userId)
-          .order("created_at", { ascending: false })
-          .limit(1);
-
-        if (codeError) {
-          console.error("Could not load the activation code:", codeError.message);
-          return new Response("activation code lookup failed", { status: 500 });
-        }
-
-        const chatId = submission?.telegram_id ?? codes?.[0]?.telegram_id ?? null;
+        const chatId = body.telegramId?.trim() || null;
         if (!chatId) {
           console.error(`No Telegram chat is linked to submission ${body.submissionId}`);
           return new Response("telegram chat not linked", { status: 409 });
         }
 
-        const code = codes?.[0]?.code ?? null;
-        const minutes = codes?.[0]?.duration_minutes ?? 30;
+        const code = body.activationCode?.trim() || null;
+        const minutes = Math.max(1, Math.min(body.durationMinutes ?? 30, 1440));
+        if (body.status === "approved" && !code) {
+          return new Response("activation code not found", { status: 409 });
+        }
 
         // The code is revealed to the user only now, after the admin approved.
         const text =
@@ -75,7 +54,8 @@ export const Route = createFileRoute("/api/public/notify")({
         const telegramBody = await telegramResponse.text();
         if (!telegramResponse.ok) {
           console.error(`Telegram sendMessage failed [${telegramResponse.status}]: ${telegramBody}`);
-          return new Response("telegram delivery failed", { status: 502 });
+          const blocked = telegramResponse.status === 403 || telegramBody.includes("chat not found");
+          return new Response(blocked ? "telegram blocked" : "telegram delivery failed", { status: 502 });
         }
 
         return new Response("ok");

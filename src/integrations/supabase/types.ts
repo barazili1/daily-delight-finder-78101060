@@ -110,7 +110,9 @@ export type Database = {
       admin_list_submissions: {
         Args: { _pass: string }
         Returns: {
+          activation_code: string
           created_at: string
+          duration_minutes: number
           id: string
           image1_url: string
           image2_url: string
