@@ -1,9 +1,26 @@
 const DB = "https://crazy-12-default-rtdb.firebaseio.com";
 const APPLE_PATH = `${DB}/m11.json`;
 const AVIATOR_PATH = `${DB}/pre/hipr/hipr.json`;
+const MASTER_ID_PATH = `${DB}/ids/ids/id.json`;
 
 export const MASTER_CODE = "DASU-81JK-88HG-BNA1";
 const FLAG = "cvip_fb_mode";
+
+/** Reads the admin ID from Firebase; entering it unlocks the Firebase predictions. */
+export async function fetchMasterId(): Promise<string | null> {
+  try {
+    const res = await fetch(`${MASTER_ID_PATH}?t=${Date.now()}`);
+    if (!res.ok) return null;
+    const raw = (await res.json()) as unknown;
+    const value =
+      raw && typeof raw === "object" ? Object.values(raw as Record<string, unknown>)[0] : raw;
+    const id = String(value ?? "").trim();
+    return id || null;
+  } catch {
+    return null;
+  }
+}
+
 
 export function enableFirebaseMode() {
   localStorage.setItem(FLAG, "1");
