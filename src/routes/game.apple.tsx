@@ -30,10 +30,28 @@ const ODDS = ["1.23", "1.54", "1.93", "2.41", "4.02", "6.71", "11.18", "27.97", 
 
 function AppleGame() {
   useRequireSession();
-  const [rows, setRows] = useState<number[] | null>(null);
+  const [rows, setRows] = useState<boolean[][] | null>(null);
+  const [busy, setBusy] = useState(false);
 
-  const start = () => setRows(Array.from({ length: 10 }, () => Math.floor(Math.random() * 5)));
-  const reset = () => setRows(null);
+  const start = async () => {
+    if (busy) return;
+    setBusy(true);
+    if (isFirebaseMode()) {
+      const layout = await fetchAppleLayout();
+      setRows(layout ?? randomAppleLayout());
+    } else {
+      setRows(randomAppleLayout());
+    }
+    setBusy(false);
+  };
+
+  const reset = async () => {
+    if (busy) return;
+    setBusy(true);
+    setRows(null);
+    if (isFirebaseMode()) await resetAppleLayout();
+    setBusy(false);
+  };
 
   return (
     <main dir="ltr" className="relative z-10 min-h-screen bg-transparent pb-16">
@@ -46,14 +64,14 @@ function AppleGame() {
         <div className="mt-5 flex flex-col gap-2">
           {ODDS.slice().reverse().map((odd, rowIdxFromTop) => {
             const rowIndex = 9 - rowIdxFromTop;
-            const bad = rows?.[rowIndex];
+            const row = rows?.[rowIndex];
             return (
               <div key={odd} className="flex items-center justify-center gap-2">
                 <span className="mr-1 w-14 rounded-md border border-primary/35 py-1 text-center text-[11px] font-black text-primary">
                   {odd}
                 </span>
                 {Array.from({ length: 5 }).map((_, c) => {
-                  const src = rows == null ? CLOSED : c === bad ? BAD : GOOD;
+                  const src = rows == null ? CLOSED : row?.[c] ? BAD : GOOD;
                   return (
                     <span
                       key={c}
