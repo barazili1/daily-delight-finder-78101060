@@ -228,7 +228,7 @@ function TermsPage() {
             <Send className="h-4 w-4 text-primary" /> Telegram channel
           </a>
           <a
-            href="https://youtube.com"
+            href="https://youtube.com/@1xbet1113?si=Qk6ep3-nb1oL2ezq"
             target="_blank"
             rel="noreferrer"
             className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-primary/40 bg-transparent py-3 text-sm font-bold text-foreground backdrop-blur-sm transition hover:border-primary"
