@@ -81,16 +81,31 @@ function AdminPage() {
 
   const setStatus = async (row: Row, status: "approved" | "rejected") => {
     setBusy(row.id);
-    await rpc("admin_set_submission_status", { _pass: pass, _id: row.id, _status: status });
+    try {
+      const statusResult = await rpc("admin_set_submission_status", {
+        _pass: pass,
+        _id: row.id,
+        _status: status,
+      });
+      if (statusResult.error) throw new Error("تعذر تحديث حالة الطلب");
 
-    await fetch("/api/public/notify", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ pass, userId: row.user_id, status }),
-    }).catch(() => {});
+      setRows((current) => current.map((item) => (item.id === row.id ? { ...item, status } : item)));
 
-    setRows((r) => r.map((x) => (x.id === row.id ? { ...x, status } : x)));
-    setBusy(null);
+      const notification = await fetch("/api/public/notify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pass, submissionId: row.id, userId: row.user_id, status }),
+      });
+
+      if (!notification.ok) {
+        const reason = await notification.text();
+        throw new Error(reason === "telegram chat not linked" ? "المستخدم لم يبدأ محادثة البوت بعد" : "تعذر إرسال رسالة تليجرام");
+      }
+    } catch (error) {
+      window.alert(error instanceof Error ? error.message : "حدث خطأ أثناء تنفيذ الطلب");
+    } finally {
+      setBusy(null);
+    }
   };
 
   const remove = async (row: Row) => {
