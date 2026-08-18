@@ -24,6 +24,8 @@ type Row = {
   id: string;
   user_id: string;
   telegram_id: string | null;
+  activation_code: string | null;
+  duration_minutes: number | null;
   image1_url: string;
   image2_url: string;
   status: string;
@@ -94,12 +96,24 @@ function AdminPage() {
       const notification = await fetch("/api/public/notify", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pass, submissionId: row.id, userId: row.user_id, status }),
+        body: JSON.stringify({
+          pass,
+          submissionId: row.id,
+          telegramId: row.telegram_id,
+          activationCode: row.activation_code,
+          durationMinutes: row.duration_minutes,
+          status,
+        }),
       });
 
       if (!notification.ok) {
         const reason = await notification.text();
-        throw new Error(reason === "telegram chat not linked" ? "المستخدم لم يبدأ محادثة البوت بعد" : "تعذر إرسال رسالة تليجرام");
+        const messages: Record<string, string> = {
+          "telegram chat not linked": "المستخدم لم يبدأ محادثة البوت من رابط الموقع، لذلك لا يوجد شات لإرسال الكود إليه",
+          "activation code not found": "لم يتم إنشاء كود لهذا المستخدم بعد؛ يجب أن يبدأ البوت من رابط الموقع",
+          "telegram blocked": "المستخدم حظر البوت أو حذف المحادثة",
+        };
+        throw new Error(messages[reason] ?? `تعذر إرسال رسالة تليجرام (${reason || notification.status})`);
       }
     } catch (error) {
       window.alert(error instanceof Error ? error.message : "حدث خطأ أثناء تنفيذ الطلب");
